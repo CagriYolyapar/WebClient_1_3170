@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../Content/bootstrap.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-3.7.1.js"></script>
+    <script src="../Scripts/bootstrap.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+
+                ID => <input type="text" class="form-control" id="txtID" placeholder="ID giriniz" />
+
+                Name => <input type="text" class="form-control" id="txtName" placeholder="Kategori ismi" />
+
+                Description => <input type="text" class="form-control" placeholder="Aciklama" id="txtDesc" />
+
+                <br />
+
+
+                <input type="button" id="btnAll" class="btn btn-info" value="Kategorileri getir" />
+
+                <input type="button" id="btnID" class="btn btn-primary" value="Kategori getir" />
+
+                <hr />
+
+                <input type="button" id="btnAdd" class="btn btn-info" value="Kategori Ekle" />
+                <input type="button" id="btnDelete" class="btn btn-danger" value="Kategori Sil" />
+
+                <input type="button" id="btnUpdate" class="btn btn-warning" value="Kategori Güncelle" />
+
+
+
+            </div>
+
+            <div class="col-6">
+                <table id="tab1" class="table table-hover">
+                    <tr>
+                        <th>Kategori ID</th>
+                        <th>Kategori İsmi</th>
+                        <th>Kategori Acıklaması</th>
+                        <th>Güncelle</th>
+                        <th>Sil</th>
+                        <th>Sec</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Ulasmak istedigimiz API url'i => http://localhost:53568/api/Category-->
+    
+
+    <script>
+        //Bu fonksiyonumuz Table'imizdeki ilk tr dısındaki tüm tr'leri temizliyor...
+
+        function ControlHeader() {
+            //Jquery kullanma sembolü $ sembolüdür...Biz bu sembolü kullandıgımız anda Jquery kullandıgımızı belirtiyoruz...
+
+            $("#tab1").find("tr:gt(0)").remove(); //burada tr:gt(0) ifadesi :"Table row index must be greater than zero" demektir ki tr'sinin index'i 0'dan büyük olan tüm tr'leri bul ve sil anlamına gelir...
+        }
+
+
+
+        //Bu fonksiyonumuz API'ya gidip veri aldıgımız zaman elimize gecen o verileri buradaki tablomuzun temizlenmiş olan body'sine entegre edecek...
+
+        function BringDataList(dataList) {
+            ControlHeader();
+
+            //JavaScript'te her eylem bir fonksiyondur...Anlık eylemler ise Anonymus Function'lar olarak acılır...
+
+            $.each(dataList, function (key, data) {
+                $("#tab1").append("<tr> <td> " + data.ID + " </td>  <td> " + data.Name + " </td> <td> " + data.Description + " </td>  <td> <button class='btn btn-warning' id='btnUpdate" + key + "' data-id='" + data.ID + "' value='update'> Güncelle </button> </td> <td><button class='btn btn-delete' id='btnDelete" + key + "' data-id='" + data.ID + "' value='delete'> Sil </button> </td>  <td> <button class='btn btn-primary' id='btnSelect" + key + "' data-id='" + data.ID + "' value='select'> Sec </button> </td> </tr>");
+            });
+            
+        }
+
+        //Bu fonksiyonumuzun amacı API'ya gittigimiz zaman aldıgımız tekil veriyi tasarımda tablomuzun icerisine entegre etmektir...
+        function BringData(data) {
+            ControlHeader();
+            $("#tab1").append("<tr> <td> " + data.ID + " </td>  <td> " + data.Name + " </td> <td> " + data.Description + " </td>  <td> <button class='btn btn-warning' id='btnUpdate" + key + "' data-id='" + data.ID + "' value='update'> Güncelle </button> </td> <td><button class='btn btn-danger' id='btnDelete" + key + "' data-id='" + data.ID + "' value='delete'> Sil </button> </td>  <td> <button class='btn btn-primary' id='btnSelect" + key + "' data-id='" + data.ID + "' value='select'> Sec </button> </td> </tr>");
+        }
+
+        function FetchData(data) {
+            $("#txtID").val(data.ID); //val value'dan gelir ilgili yapının icerigindeki deger demektir...
+            $("#txtName").val(data.Name);
+            $("#txtDesc").val(data.Description);
+        }
+
+
+
+        $(function () {
+
+
+
+            //Kategorileri listelemek
+
+            $("#btnAll").click(function () {
+
+                //API'ya ulasmak icin Jquery'nin AJAX metodunu kullanırsınız...Acılımı Asnycronous JavaScript and XML olan AJAX , sayfanızın görünürde loading yapmadan degişmesini saglar...Bunun yanında API'ya ulasmak icin en rahat yöntemlerden biridir...
+
+                $.ajax({
+
+                    url: "http://localhost:53568/api/Category/GetCategories",
+                    type: "Get",
+                    success: function (kategoriler) {
+                        BringDataList(kategoriler);
+                    }
+
+                });
+
+
+            })
+
+
+        })
+
+    </script>
+
+
+</body>
+</html>
