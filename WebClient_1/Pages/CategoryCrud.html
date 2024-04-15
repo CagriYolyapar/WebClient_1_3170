@@ -33,6 +33,9 @@
 
                 <input type="button" id="btnUpdate" class="btn btn-warning" value="Kategori Güncelle" />
 
+                <hr />
+
+                <input type="text" id="txtSearch" placeholder="Arama yapınız" />
 
 
             </div>
@@ -133,6 +136,110 @@
                 })
             })
 
+
+            //Kategori Ekle
+            $("#btnAdd").click(function () {
+                $.ajax({
+                    url: " http://localhost:53568/api/Category/AddCategory",
+                    type: "Post",
+                    data: { Name: $("#txtName").val(), Description: $("#txtDesc").val() },
+                    success: function (kategoriler) {
+                        BringDataList(kategoriler);
+                    }
+                })
+            })   
+
+
+            //Kategori Sil
+
+            //Siz Delete tipinde bir request yaptıgınız zaman data ile veri gönderemezsiniz...
+
+            $("#btnDelete").click(function () {
+                $.ajax({
+                    url: "http://localhost:53568/api/Category/DeleteCategory/" + $("#txtID").val(),
+                    type: "Delete",
+                    success: function (kategoriler) {
+                        BringDataList(kategoriler)
+                    }
+
+                })
+            }) 
+
+
+            //Kategori Güncelleme
+
+            $("#btnUpdate").click(function () {
+                $.ajax({
+                    url: "http://localhost:53568/api/Category/UpdateCategory",
+                    type: "Put",
+                    data: { ID: $("#txtID").val(), Name: $("#txtName").val(), Description: $("#txtDesc").val() },
+                    success: function (kategoriler) {
+                        BringDataList(kategoriler);
+                    }
+
+                })
+
+            }) 
+
+            //Kategori Ara
+
+            $("#txtSearch").keyup(function () {
+                $.ajax({
+                    url: "http://localhost:53568/api/Category/SearchCategory",
+                    type: "Get",
+                    data: { item: $(this).val() },
+                    success: function (kategoriler) {
+                        BringDataList(kategoriler);
+                    }
+                })
+            }) 
+
+            //JS EventHandling
+
+            //on fonksiyonu sırasıyla su argümanları bekler:
+            //1 => event handling hangi yapı üzerinde yapılacak
+            //2 => bu yapı icerisinde kime müdahale edildiginde gerceklesecek
+            //3 => Bu eventhandling'de ne eylemi yapılacak
+
+            //Update
+
+            $("#tab1").on("click", "[value=update]", function () {
+
+                $.ajax({
+                    url: "http://localhost:53568/api/Category/UpdateCategory",
+                    type: "Put",
+                    data: { ID: $(this).attr("data-id"), Name: $("#txtName").val(), Description: $("#txtDesc").val() },
+                    success: function (kategoriler) {
+                        BringDataList(kategoriler);
+                    }
+                })
+
+            })
+
+            //Delete 
+            $("#tab1").on("click", "[value=delete]", function () {
+                $.ajax({
+                    url: "http://localhost:53568/api/Category/DeleteCategory/" + $(this).attr("data-id"),
+                    type: "Delete",
+                    success: function (kategoriler) {
+                        BringDataList(kategoriler);
+                    }
+                })
+            })    
+
+
+            //Select
+
+            $("#tab1").on("click", "[value=select]", function () {
+
+                $.ajax({
+                    url: "http://localhost:53568/api/Category/GetCategory/" + $(this).attr("data-id"),
+                    type: "Get",
+                    success: function (kategori) {
+                        FetchData(kategori);
+                    }
+                })
+            })        
 
         })
 
