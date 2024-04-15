@@ -75,7 +75,7 @@
             //JavaScript'te her eylem bir fonksiyondur...Anlık eylemler ise Anonymus Function'lar olarak acılır...
 
             $.each(dataList, function (key, data) {
-                $("#tab1").append("<tr> <td> " + data.ID + " </td>  <td> " + data.Name + " </td> <td> " + data.Description + " </td>  <td> <button class='btn btn-warning' id='btnUpdate" + key + "' data-id='" + data.ID + "' value='update'> Güncelle </button> </td> <td><button class='btn btn-delete' id='btnDelete" + key + "' data-id='" + data.ID + "' value='delete'> Sil </button> </td>  <td> <button class='btn btn-primary' id='btnSelect" + key + "' data-id='" + data.ID + "' value='select'> Sec </button> </td> </tr>");
+                $("#tab1").append("<tr> <td> " + data.ID + " </td>  <td> " + data.Name + " </td> <td> " + data.Description + " </td>  <td> <button class='btn btn-warning' id='btnUpdate" + key + "' data-id='" + data.ID + "' value='update'> Güncelle </button> </td> <td><button class='btn btn-danger' id='btnDelete" + key + "' data-id='" + data.ID + "' value='delete'> Sil </button> </td>  <td> <button class='btn btn-primary' id='btnSelect" + key + "' data-id='" + data.ID + "' value='select'> Sec </button> </td> </tr>");
             });
             
         }
@@ -83,7 +83,7 @@
         //Bu fonksiyonumuzun amacı API'ya gittigimiz zaman aldıgımız tekil veriyi tasarımda tablomuzun icerisine entegre etmektir...
         function BringData(data) {
             ControlHeader();
-            $("#tab1").append("<tr> <td> " + data.ID + " </td>  <td> " + data.Name + " </td> <td> " + data.Description + " </td>  <td> <button class='btn btn-warning' id='btnUpdate" + key + "' data-id='" + data.ID + "' value='update'> Güncelle </button> </td> <td><button class='btn btn-danger' id='btnDelete" + key + "' data-id='" + data.ID + "' value='delete'> Sil </button> </td>  <td> <button class='btn btn-primary' id='btnSelect" + key + "' data-id='" + data.ID + "' value='select'> Sec </button> </td> </tr>");
+            $("#tab1").append("<tr> <td> " + data.ID + " </td>  <td> " + data.Name + " </td> <td> " + data.Description + " </td>  <td> <button class='btn btn-warning' id='btnUpdate" + data.ID + "' data-id='" + data.ID + "' value='update'> Güncelle </button> </td> <td><button class='btn btn-danger' id='btnDelete" + data.ID + "' data-id='" + data.ID + "' value='delete'> Sil </button> </td>  <td> <button class='btn btn-primary' id='btnSelect" + data.ID + "' data-id='" + data.ID + "' value='select'> Sec </button> </td> </tr>");
         }
 
         function FetchData(data) {
@@ -95,7 +95,7 @@
 
 
         $(function () {
-
+           
 
 
             //Kategorileri listelemek
@@ -115,6 +115,22 @@
                 });
 
 
+            })
+
+
+            //Kategori Getir
+            
+
+            $("#btnID").click(function () {
+                $.ajax({
+                    url: " http://localhost:53568/api/Category/GetCategory", //Burada dilerseniz data parametresinde Json verisi göndermek yerine URL'e direkt /"+$("#txtID").val() yazılabilir...Ama eger böyle yapacaksanız sakın GetCategory'den sonra slash koymayı unutmayın...Ve bir de bu ancak gitmek istediginiz Action parametresinin ismi RouteMap'inize uyuyorsa gecerlidir...Baska bir parametre ismi varsa bunun icin QueryString yöntemi kullanmak gerekir...
+                    data: { id: $("#txtID").val() },
+                    type: "Get",
+                    success: function (kategori) {
+                        BringData(kategori);
+                    }
+
+                })
             })
 
 
